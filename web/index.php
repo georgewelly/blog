@@ -24,7 +24,7 @@ $app->get('/', function() use($app) {
 
 $app->get('/posts/{name}/', function($name) use($app) {
     $app['monolog']->addDebug('posts/' . $name . '.twig');
-    return $app['twig']->render('posts/' . $name . '.twig');
+    return $app['twig']->render('posts/' . $name . '.twig'));
 });
 
 $app->run();
