@@ -1,0 +1,164 @@
+
+{% extends "layout.html" %}
+
+{% block content %}
+<html><head><meta charset="utf-8"><title>Untitled Document.md</title><style></style></head><body id="preview">
+<h1><a id="Bioinformatics_0"></a>Bioinformatics</h1>
+<h5><a id="A_Talk_led_by_Kyata_Chibalabala_3"></a>A Talk led by Kyata Chibalabala</h5>
+<p>Bioinformatics, as Kyata puts it, is the application of Computer Science to Biology in order to make processes efficient, aid research or to further advance medical science. We see Computing intergrated very easily within both Chemistry and physics, the latter being very common, as computers are needed often for calculations in physics. In PET scans, in particle colliders, in seismic readers etc. However, Computing is also used often in biology. Our task, should we choose to accept it, was to take a strand of DNA and program something in order to undergo translation and transcription in order to turn DNA into a protein chain.</p>
+<p>We the several problems we had to undergo were:</p>
+<ul>
+<li>Turning a DNA string into its mRNA with complementary Nucleobases:</li>
+</ul>
+<ol>
+<li>Adenine -&gt; Uracil</li>
+<li>Thymine -&gt; Adenine</li>
+<li>Cytosine-&gt; Guanine</li>
+<li>Guanine-&gt; Cytosine</li>
+</ol>
+<ul>
+<li>Then looking up this mRNA strand for a starting CODON (AUG) and make triplets from that codon onwards.</li>
+<li>Ending the mRNA strand at the END codon (UGA, UAG, UAA)</li>
+<li>Finally, looking up each codon, changing it to its corresponding protein, and printing its string</li>
+</ul>
+<p><strong>Finished Code</strong></p>
+<pre><code>hello world
+
+var acidDict = {
+'UUU': 'Phe',
+'UUC': 'Phe',
+'UUA': 'Leu',
+'UUG': 'Leu',
+'UCU': 'Ser',
+'UCC': 'Ser',
+'UCA': 'Ser',
+'UCG': 'Ser',
+'UAU': 'Tyr',
+'UAC': 'Tyr',
+'UAA': 'Stop',
+'UAG': 'Stop',
+'UGU': 'Cys',
+'UGC': 'Cys',
+'UGA': 'Stop',
+'UGG': 'Trp',
+
+'CUU': 'Leu',
+'CUC': 'Leu',
+'CUA': 'Leu',
+'CUG': 'Leu',
+
+'CCU': 'Pro',
+'CCC': 'Pro',
+'CCA': 'Pro',
+'CCG': 'Pro',
+
+'CAU': 'His',
+'CAC': 'His',
+'CAA': 'Gin',
+'CAG': 'Gin',
+
+'CGU': 'Arg',
+'CGC': 'Arg',
+'CGA': 'Arg',
+'CGG': 'Arg','AUU': 'Lle',
+'AUC': 'Lle',
+    'AUA': 'Lle',
+        'AUG': 'Met',
+
+            'ACU': 'Thr',
+                'ACC': 'Thr',
+                    'ACA': 'Thr',
+                        'ACG': 'Thr',
+
+                            'AAU': 'AsN',
+                                'AAC': 'AsN',
+                                    'AAA': 'Lys',
+                                        'AAG': 'Lys',
+
+                                            'AGU': 'Ser',
+                                                'AGC': 'Ser',
+                                                    'AGA': 'Arg',
+                                                        'AGG': 'Arg',
+
+'GUU': 'Val',
+'GUC': 'Val',
+'GUA': 'Val',
+        'GUG': 'Val',
+
+            'GCU': 'Ala',
+                'GCC': 'Ala',
+                    'GCA': 'Ala',
+                        'GCG': 'Ala',
+
+                            'GAU': 'Asp',
+                                'GAC': 'Asp',
+                                    'GAA': 'Glu',
+                                        'GAG': 'Glu',
+
+                                            'GGU': 'Gly',
+                                                'GGC': 'Gly',
+                                                    'GGA': 'Gly',
+                                                        'GGG': 'Gly'
+};
+
+var sequence = &quot;TACGATGACTCACAGGTCTATCACCCTATTAACCACTCACGGGAGCTCTCCATGCATTTGGTATTTTCGTCTGGGGGGTGTGCACGCGATAGCATTGCGAGACGCTGGAGCCGGAGCACCCTATGTCGCAGTATCTGTCTTTGATTCCTGCCTCATTCTATTATTTATCGCACCTACGTTCAATATTACAGGCGAACATACCTACTAAAGTGTATTGTTAATTAATTAATGCTTGTAGGACATAATAATAACAATTGAAT&quot;;
+
+var sequenceArray = sequence.split(&quot;&quot;);
+
+for (i = 0; i &lt; sequenceArray.length; i++){ //Translates array into mRNA       
+        switch(sequenceArray[i]){
+                case &quot;A&quot;:
+                        sequenceArray[i] = &quot;U&quot;;
+                        break;
+                case &quot;T&quot;:
+                        sequenceArray[i] = &quot;A&quot;;
+                        break;
+                case &quot;C&quot;:
+                        sequenceArray[i] = &quot;G&quot;;
+                        break;
+                case &quot;G&quot;:
+                        sequenceArray[i] = &quot;C&quot;;
+                        break;
+                default:
+                        console.error(&quot;Did not read a valid base!&quot;);
+                        break;
+
+        }
+}
+var mRNA = sequenceArray.join(&quot;&quot;);
+
+var startPointIndex = mRNA.search(&quot;AUG&quot;);
+
+var tripletArray = [];
+
+for (i = startPointIndex; i &lt; mRNA.length; i += 3){ //Converts mRNA to tripletArray
+        tripletArray[i] = mRNA.substring(i, i + 3);
+}
+
+for (i = 0; i &lt; tripletArray.length; i++){ //Shorten array to within stop codon boundary
+        switch(tripletArray[i]){
+                case &quot;UGA&quot;:
+                        tripletArray = tripletArray.slice(0, i + 3);
+                        break;
+case &quot;UAG&quot;:
+                        tripletArray = tripletArray.slice(0, i + 3);
+                        break;
+                case &quot;UAA&quot;:
+                        tripletArray = tripletArray.slice(0, i + 3);
+                        break;
+                default:
+                        break;
+        }
+}
+
+tripletArray = tripletArray.filter(function(){return true;}); //Resets array indices 
+
+var proteinArray = [];
+
+for (i = 0; i &lt; tripletArray.length; i++){ //Populate proteinArray using keys from acidDict
+        proteinArray[i] = acidDict[tripletArray[i]];
+}
+</code></pre>
+
+</body></html> 
+{% endblock %}
